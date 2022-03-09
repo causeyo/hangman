@@ -1,6 +1,15 @@
 import pygame
 import random
 
+
+def randomWord():
+    file = open('words.txt')
+    words_list = file.readlines()
+    random_word_index = random.randrange(0, len(words_list) - 1)
+
+    return words_list[random_word_index][:-1]
+
+
 pygame.init()
 winHeight = 480
 winWidth = 700
@@ -24,8 +33,17 @@ guessed = []
 
 win.fill(GREEN)
 pygame.display.update()
-f = input("dajesz mordo: ")
+# f = input("dajesz mordo: ")
+#
+# win.fill(BLUE)
+# pygame.display.update()
+# f = input("dajesz mordo: ")
 
-win.fill(BLUE)
+pic = pygame.image.load('hangman0.png')
+win.blit(pic, (winWidth/2 - pic.get_width()/2 + 20, 50))
 pygame.display.update()
-f = input("dajesz mordo: ")
+# f = input("dajesz mordo: ")
+
+pygame.quit()
+
+
