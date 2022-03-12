@@ -5,7 +5,7 @@ import random
 # GLOBAL VARIABLES
 
 WIN_HEIGHT = 480
-WIN_WIDTH = 700
+WIN_WIDTH = 800
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255,255)
@@ -17,7 +17,7 @@ LIGHT_BLUE = (102, 255, 255)
 WORD = ''
 BUTTONS = []
 GUESSED = []
-HANGMAN_PICS =  [pygame.image.load('hangman0.png')]
+HANGMAN_PICS = [pygame.image.load('hangman0.png')]
 LIMBS = 0
 
 
@@ -29,46 +29,70 @@ def get_random_word():
     return words_list[random_word_index][:-1]
 
 
-def redraw_window():
+def redraw_window(window, buttons, font):
     global GUESSED
     global HANGMAN_PICS
     global LIMBS
-    win.fill(GREEN)
-    pic = pygame.image.load('hangman0.png')
-    win.blit(pic, (WIN_WIDTH / 2 - pic.get_width() / 2 + 20, 50))
+    window.fill(GREEN)
+    for i in range(len(buttons)):
+        if buttons[i][4]:
+            pygame.draw.circle(window, BLACK, (buttons[i][1], buttons[i][2]), buttons[i][3])
+            pygame.draw.circle(window, buttons[i][0], (buttons[i][1], buttons[i][2]), buttons[i][3] - 2
+                               )
+            label = font.render(chr(buttons[i][5]), 1, BLACK)
+            window.blit(label, (buttons[i][1] - (label.get_width() / 2), buttons[i][2] - (label.get_height() / 2)))
     pygame.display.update()
     input("dajesz mordo: ")
-    for i in range(len(BUTTONS)):
-        if BUTTONS[i][4]:
-            pygame.draw.circle(win, BLACK, (BUTTONS[i][1], BUTTONS[i][2]), BUTTONS[i][3])
-            pygame.draw.circle(win, BUTTONS[i][0], (BUTTONS[i][1], BUTTONS[i][2]), BUTTONS[i][3] - 2
-                               )
-            label = btn_font.render(chr(BUTTONS[i][5]), 1, BLACK)
-            win.blit(label, (BUTTONS[i][1] - (label.get_width() / 2), BUTTONS[i][2] - (label.get_height() / 2)))
+    return window
 
 
-def spacedOut(word):
-    spacedWord = ''
-    guessedLetters = GUESSED
-    for x in range(len(word)):
-        if word[x] != ' ':
-            spacedWord += '_ '
-            for i in range(len(guessedLetters)):
-                if word[x].upper() == guessedLetters[i].upper():
-                    spacedWord = spacedWord[:-2]
-                    spacedWord += word[x].upper() + ' '
-        elif word[x] == ' ':
-            spacedWord += ' '
-    return spacedWord
+def hide_password(password):
+    """
+    Return hidden password
+    :param password: string 'password'
+    :return: hidden_password in format '_ _ _ _ _ _ _'
+    """
+    hidden_password = ''
+    known_letters = GUESSED
+    for x in range(len(password)):
+        if password[x] != ' ':
+            hidden_password += '_ '
+            for i in range(len(known_letters)):
+                if password[x].upper() == known_letters[i].upper():
+                    hidden_password = hidden_password[:-2]
+                    hidden_password += password[x].upper() + ' '
+        elif password[x] == ' ':
+            hidden_password += ' '
+    return hidden_password
+
+
+def create_buttons():
+    """
+
+    :return:
+    """
+    buttons = []
+    increase = round(WIN_WIDTH / 13)
+    for i in range(26):
+        if i < 13:
+            y = 40
+            x = 25 + (increase * i)
+        else:
+            x = 25 + (increase * (i - 13))
+            y = 85
+        buttons.append([LIGHT_BLUE, x, y, 20, True, 65 + i])
+        # buttons.append([color, x_pos, y_pos, radius, visible, char])
+    return buttons
 
 
 if __name__ == '__main__':
-    # pygame.init()
-    # win = pygame.display.set_mode((WIN_HEIGHT, WIN_WIDTH))
-    # btn_font = pygame.font.SysFont("arial", 20)
-    # guess_font = pygame.font.SysFont("monospace", 24)
-    # lost_font = pygame.font.SysFont('arial', 45)
-    # redraw_window()
+    pygame.init()
+    win = pygame.display.set_mode((WIN_HEIGHT, WIN_WIDTH))
+    button_font = pygame.font.SysFont("arial", 20)
+    guess_font = pygame.font.SysFont("monospace", 24)
+    lost_font = pygame.font.SysFont('arial', 45)
+    buttons = create_buttons()
+    redraw_window(window=win, buttons=buttons, font=button_font)
     #
     # pygame.quit()
 
