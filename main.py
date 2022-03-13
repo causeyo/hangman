@@ -5,7 +5,7 @@ import random
 # GLOBAL VARIABLES
 
 WIN_HEIGHT = 480
-WIN_WIDTH = 800
+WIN_WIDTH = 700
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255,255)
@@ -21,39 +21,43 @@ HANGMAN_PICS = [pygame.image.load('hangman0.png')]
 LIMBS = 0
 
 
-def get_random_word():
-    file = open('words.txt')
+def get_random_word(filename="words.txt"):
+    file = open(filename)
     words_list = file.readlines()
     random_word_index = random.randrange(0, len(words_list) - 1)
 
     return words_list[random_word_index][:-1]
 
 
-def redraw_window(window, buttons, font):
+def redraw_window(window, buttons, font, password, guessed_letters):
     global GUESSED
     global HANGMAN_PICS
     global LIMBS
     window.fill(GREEN)
-    for i in range(len(buttons)):
-        if buttons[i][4]:
-            pygame.draw.circle(window, BLACK, (buttons[i][1], buttons[i][2]), buttons[i][3])
-            pygame.draw.circle(window, buttons[i][0], (buttons[i][1], buttons[i][2]), buttons[i][3] - 2
-                               )
-            label = font.render(chr(buttons[i][5]), 1, BLACK)
-            window.blit(label, (buttons[i][1] - (label.get_width() / 2), buttons[i][2] - (label.get_height() / 2)))
+    for button in buttons:
+        if button[4]:
+            pygame.draw.circle(window, BLACK, (button[1], button[2]), button[3])
+            pygame.draw.circle(window, button[0], (button[1], button[2]), button[3] - 2)
+            label = font.render(chr(button[5]), 1, BLACK)
+            window.blit(label, (button[1] - (label.get_width() / 2), button[2] - (label.get_height() / 2)))
+    password = hide_password(password, guessed_letters)
+    password_label = font.render(password, 1, BLACK)
+    frame = password_label.get_rect()
+    frame_length = frame[2]
+    window.blit(password_label, (WIN_WIDTH/2 - frame_length/2, 400))
     pygame.display.update()
     input("dajesz mordo: ")
     return window
 
 
-def hide_password(password):
+def hide_password(password, guessed_letters):
     """
     Return hidden password
     :param password: string 'password'
     :return: hidden_password in format '_ _ _ _ _ _ _'
     """
     hidden_password = ''
-    known_letters = GUESSED
+    known_letters = guessed_letters
     for x in range(len(password)):
         if password[x] != ' ':
             hidden_password += '_ '
@@ -87,14 +91,15 @@ def create_buttons():
 
 if __name__ == '__main__':
     pygame.init()
-    win = pygame.display.set_mode((WIN_HEIGHT, WIN_WIDTH))
+    random_word = get_random_word(filename="words.txt")
+    win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
     button_font = pygame.font.SysFont("arial", 20)
     guess_font = pygame.font.SysFont("monospace", 24)
     lost_font = pygame.font.SysFont('arial', 45)
     buttons = create_buttons()
-    redraw_window(window=win, buttons=buttons, font=button_font)
-    #
-    # pygame.quit()
+    redraw_window(window=win, buttons=buttons, font=button_font, password=random_word, guessed_letters=GUESSED)
+
+    pygame.quit()
 
 
 # f = input("dajesz mordo: ")
