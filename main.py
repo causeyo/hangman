@@ -46,7 +46,7 @@ def redraw_window(window, buttons, font, password, guessed_letters):
     frame_length = frame[2]
     window.blit(password_label, (WIN_WIDTH/2 - frame_length/2, 400))
     pygame.display.update()
-    input("dajesz mordo: ")
+    # input("dajesz mordo: ")
     return window
 
 
@@ -89,6 +89,8 @@ def create_buttons():
     return buttons
 
 
+active_game = True
+
 if __name__ == '__main__':
     pygame.init()
     random_word = get_random_word(filename="words.txt")
@@ -97,8 +99,16 @@ if __name__ == '__main__':
     guess_font = pygame.font.SysFont("monospace", 24)
     lost_font = pygame.font.SysFont('arial', 45)
     buttons = create_buttons()
-    redraw_window(window=win, buttons=buttons, font=button_font, password=random_word, guessed_letters=GUESSED)
 
+    while active_game:
+        redraw_window(window=win, buttons=buttons, font=button_font, password=random_word, guessed_letters=GUESSED)
+        pygame.time.delay(10)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                active_game = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    active_game = False
     pygame.quit()
 
 
