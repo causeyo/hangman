@@ -89,7 +89,13 @@ def create_buttons():
     return buttons
 
 
-active_game = True
+def button_push(x, y):
+    for button in buttons:
+        if button[1] - 20 < x < button[1] + 20:
+            if button[2] - 20 < y < button[2] + 20:
+                return button[5]
+    return None
+
 
 if __name__ == '__main__':
     pygame.init()
@@ -99,7 +105,7 @@ if __name__ == '__main__':
     guess_font = pygame.font.SysFont("monospace", 24)
     lost_font = pygame.font.SysFont('arial', 45)
     buttons = create_buttons()
-
+    active_game = True
     while active_game:
         redraw_window(window=win, buttons=buttons, font=button_font, password=random_word, guessed_letters=GUESSED)
         pygame.time.delay(10)
@@ -109,6 +115,11 @@ if __name__ == '__main__':
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     active_game = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                click_pos = pygame.mouse.get_pos()
+                letter = button_push(click_pos[0], click_pos[1])
+                if letter != None:
+                    GUESSED.append(chr(letter))
     pygame.quit()
 
 
