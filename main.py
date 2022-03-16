@@ -118,7 +118,7 @@ if __name__ == '__main__':
             if event.type == pygame.MOUSEBUTTONDOWN:
                 click_pos = pygame.mouse.get_pos()
                 letter = button_push(click_pos[0], click_pos[1])
-                if letter != None:
+                if letter:
                     GUESSED.append(chr(letter))
     pygame.quit()
 
