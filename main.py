@@ -123,7 +123,7 @@ if __name__ == '__main__':
     pygame.quit()
 
 
-# f = input("dajesz mordo: ")
+f = input("dajesz mordo: ")
 #
 # win.fill(BLUE)
 # pygame.display.update()
