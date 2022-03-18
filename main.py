@@ -97,15 +97,24 @@ def button_push(x, y):
     return None
 
 
+def hang(guess, word):
+    if guess.lower() not in word.lower():
+        return True
+    else:
+        return False
+
+
 if __name__ == '__main__':
     pygame.init()
     random_word = get_random_word(filename="words.txt")
+    pygame.display.set_caption("HANGMAN")
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
     button_font = pygame.font.SysFont("arial", 20)
     guess_font = pygame.font.SysFont("monospace", 24)
     lost_font = pygame.font.SysFont('arial', 45)
     buttons = create_buttons()
     active_game = True
+    limbs = 0
     while active_game:
         redraw_window(window=win, buttons=buttons, font=button_font, password=random_word, guessed_letters=GUESSED)
         pygame.time.delay(10)
@@ -120,10 +129,21 @@ if __name__ == '__main__':
                 letter = button_push(click_pos[0], click_pos[1])
                 if letter:
                     GUESSED.append(chr(letter))
+                    buttons[letter - 65][4] = False
+                    if hang(chr(letter), random_word):
+                        if limbs != 3:
+                            limbs += 1
+                            print(limbs)
+                        else:
+                            lostTxt = 'You Lost, press any key to play again...'
+                            winTxt = 'WINNER!, press any key to play again...'
+                            redraw_window(window=win, buttons=buttons, font=button_font, password=random_word,
+                                          guessed_letters=GUESSED)
+                            active_game = False
     pygame.quit()
 
 
-f = input("dajesz mordo: ")
+# f = input("dajesz mordo: ")
 #
 # win.fill(BLUE)
 # pygame.display.update()
