@@ -107,7 +107,7 @@ def hang(guess, word):
 if __name__ == '__main__':
     pygame.init()
     random_word = get_random_word(filename="words.txt")
-    pygame.display.set_caption("HANGMAN")
+    pygame.display.set_caption("HANGMAN GAME")
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
     button_font = pygame.font.SysFont("arial", 20)
     guess_font = pygame.font.SysFont("monospace", 24)
