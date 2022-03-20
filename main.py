@@ -5,7 +5,7 @@ import random
 # GLOBAL VARIABLES
 
 WIN_HEIGHT = 480
-WIN_WIDTH = 700
+WIN_WIDTH = 800
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255,255)
@@ -17,7 +17,9 @@ LIGHT_BLUE = (102, 255, 255)
 WORD = ''
 BUTTONS = []
 GUESSED = []
-HANGMAN_PICS = [pygame.image.load('hangman0.png')]
+HANGMAN_PICS = [pygame.image.load('hangman0.png'), pygame.image.load('hangman1.png'), pygame.image.load('hangman2.png'),
+                pygame.image.load('hangman3.png'), pygame.image.load('hangman4.png'), pygame.image.load('hangman5.png'),
+                pygame.image.load('hangman6.png')]
 LIMBS = 0
 
 
@@ -45,6 +47,9 @@ def redraw_window(window, buttons, font, password, guessed_letters):
     frame = password_label.get_rect()
     frame_length = frame[2]
     window.blit(password_label, (WIN_WIDTH/2 - frame_length/2, 400))
+    pic = HANGMAN_PICS[limbs]
+    win.blit(pic, (WIN_WIDTH / 2 - pic.get_width() / 2 + 20, 150))
+
     pygame.display.update()
     # input("dajesz mordo: ")
     return window
@@ -104,6 +109,49 @@ def hang(guess, word):
         return False
 
 
+def end(word, winner=False):
+    global limbs
+    lostTxt = 'You Lost, press any key to play again...'
+    winTxt = 'WINNER!, press any key to play again...'
+    # redraw_window(window=win, buttons=buttons, font=button_font, password=random_word, guessed_letters=GUESSED)
+    pygame.time.delay(1000)
+    win.fill(GREEN)
+
+    if winner == True:
+        label = lost_font.render(winTxt, 1, BLACK)
+    else:
+        label = lost_font.render(lostTxt, 1, BLACK)
+
+    wordTxt = lost_font.render(word.upper(), 1, BLACK)
+    wordWas = lost_font.render('The phrase was: ', 1, BLACK)
+
+    win.blit(wordTxt, (WIN_WIDTH/2 - wordTxt.get_width()/2, 295))
+    win.blit(wordWas, (WIN_WIDTH/2 - wordWas.get_width()/2, 245))
+    win.blit(label, (WIN_WIDTH / 2 - label.get_width() / 2, 140))
+    pygame.display.update()
+    again = True
+    while again:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                again = False
+    reset()
+
+
+def reset():
+    global limbs
+    global guessed
+    global buttons
+    global word
+    for button in buttons:
+        button[4] = True
+
+    limbs = 0
+    guessed = []
+    word = get_random_word(filename="words.txt")
+
+
 if __name__ == '__main__':
     pygame.init()
     random_word = get_random_word(filename="words.txt")
@@ -117,6 +165,7 @@ if __name__ == '__main__':
     limbs = 0
     while active_game:
         redraw_window(window=win, buttons=buttons, font=button_font, password=random_word, guessed_letters=GUESSED)
+
         pygame.time.delay(10)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -131,15 +180,12 @@ if __name__ == '__main__':
                     GUESSED.append(chr(letter))
                     buttons[letter - 65][4] = False
                     if hang(chr(letter), random_word):
-                        if limbs != 3:
+                        if limbs != 5:
                             limbs += 1
                             print(limbs)
                         else:
-                            lostTxt = 'You Lost, press any key to play again...'
-                            winTxt = 'WINNER!, press any key to play again...'
-                            redraw_window(window=win, buttons=buttons, font=button_font, password=random_word,
-                                          guessed_letters=GUESSED)
-                            active_game = False
+                            # active_game = False
+                            end(word=random_word, winner=False)
     pygame.quit()
 
 
