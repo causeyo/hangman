@@ -31,7 +31,7 @@ for i in range(26):
     else:
         x = 25 + (increase * (i - 13))
         y = 85
-    buttons.append([LIGHT_BLUE, x, y, 20, True, 65 + i])
+    buttons.append(Button(LIGHT_BLUE, x, y, 20, True, 65 + i))
 #     # buttons.append([color, x_pos, y_pos, radius, visible, char])
 # return buttons
 
@@ -42,10 +42,10 @@ win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 button_font = pygame.font.SysFont("arial", 20)
 
 for button in buttons:
-    pygame.draw.circle(win, BLACK, (button[1], button[2]), button[3])
-    pygame.draw.circle(win, button[0], (button[1], button[2]), button[3] - 2)
-    label = button_font.render(chr(button[5]), 1, BLACK)
-    win.blit(label, (button[1] - (label.get_width() / 2), button[2] - (label.get_height() / 2)))
+    pygame.draw.circle(win, BLACK, (button.pos_x, button.pos_y), button.radius)
+    pygame.draw.circle(win, button.color, (button.pos_x, button.pos_y), button.radius - 2)
+    label = button_font.render(chr(button.char), 1, BLACK)
+    win.blit(label, (button.pos_x - (label.get_width() / 2), button.pos_y - (label.get_height() / 2)))
 
 pygame.display.update()
 input("dajesz mordo: ")
