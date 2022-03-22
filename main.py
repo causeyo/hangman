@@ -157,6 +157,7 @@ if __name__ == '__main__':
     random_word = get_random_word(filename="words.txt")
     pygame.display.set_caption("HANGMAN GAME")
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
+    print(win.get_height())
     button_font = pygame.font.SysFont("arial", 20)
     guess_font = pygame.font.SysFont("monospace", 24)
     lost_font = pygame.font.SysFont('arial', 45)
@@ -197,7 +198,3 @@ if __name__ == '__main__':
 
 
 # f = input("dajesz mordo: ")
-
-
-
-
