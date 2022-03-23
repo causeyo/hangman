@@ -18,6 +18,13 @@ class Board:
         self.height = height
         self.window = self.set_window()
         self.buttons = self.set_buttons()
+        self.fonts = self.set_fonts()
+
+    def set_fonts(self):
+        button_font = pygame.font.SysFont("arial", 20)
+        guess_font = pygame.font.SysFont("monospace", 24)
+        lost_font = pygame.font.SysFont('arial', 45)
+        return {'button_font': button_font, 'guess_font': guess_font, 'lost_font': lost_font}
 
     def set_window(self):
         return pygame.display.set_mode((self.width, self.height))
@@ -34,6 +41,18 @@ class Board:
                 y = 85
             buttons.append(Button(LIGHT_BLUE, x, y, 20, True, 65 + i))
             return buttons
+
+
+class Password:
+    def __init__(self):
+        self.password = self.set_password()
+
+    def set_password(self, filename="words.txt"):
+        file = open(filename)
+        words_list = file.readlines()
+        random_word_index = random.randrange(0, len(words_list) - 1)
+        return words_list[random_word_index][:-1]
+
 
 
 class Button:
@@ -62,6 +81,7 @@ class Button:
 
 pygame.init()
 b = Board(400, 800)
+print(b.fonts)
 # pygame.display.set_caption("HANGMAN GAME")
 # win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 # button_font = pygame.font.SysFont("arial", 20)
