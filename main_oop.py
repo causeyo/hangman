@@ -82,6 +82,7 @@ class Button:
 pygame.init()
 b = Board(400, 800)
 print(b.fonts)
+print(b.buttons)
 # pygame.display.set_caption("HANGMAN GAME")
 # win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 # button_font = pygame.font.SysFont("arial", 20)
