@@ -46,12 +46,32 @@ class Board:
 class Password:
     def __init__(self):
         self.password = self.set_password()
+        self.hiddden_password = ''
 
     def set_password(self, filename="words.txt"):
         file = open(filename)
         words_list = file.readlines()
         random_word_index = random.randrange(0, len(words_list) - 1)
         return words_list[random_word_index][:-1]
+
+    def hide_password(self, guessed_letters):
+        """
+        Return hidden password
+        :param password: string 'password'
+        :return: hidden_password in format '_ _ _ _ _ _ _'
+        """
+        hidden_password = ''
+        guessed_letters = guessed_letters
+        for x in range(len(self.password)):
+            if self.password[x] != ' ':
+                hidden_password += '_ '
+                for i in range(len(guessed_letters)):
+                    if self.password[x].upper() == guessed_letters[i].upper():
+                        hidden_password = hidden_password[:-2]
+                        hidden_password += self.password[x].upper() + ' '
+            elif self.password[x] == ' ':
+                hidden_password += ' '
+        return hidden_password
 
 
 
