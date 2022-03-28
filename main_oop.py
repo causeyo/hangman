@@ -62,6 +62,7 @@ class Password:
         """
         hidden_password = ''
         guessed_letters = guessed_letters
+
         for x in range(len(self.password)):
             if self.password[x] != ' ':
                 hidden_password += '_ '
